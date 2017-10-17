@@ -1,0 +1,46 @@
+.header {
+	width: 100%;
+	height: 50px;
+	background-color: #262626;
+}
+.nav {
+	margin: 0 auto;
+	width: 1020px;
+	height: 50px;
+}
+.column {
+	display: block;
+	width: 100px;
+	height: 50px;
+	float: left;
+	text-align: center;
+	line-height: 50px;
+	font-size: 16px;
+	color: #FFFFFF;
+}
+#index {
+	text-align: left;
+	font-size: 25px;
+}
+#about {
+	float: right;
+	text-align: right;
+	font-size: 16px;
+	color: #FFFFFF;
+	display: block;
+	width: 100px;
+	height: 50px;
+	line-height: 50px;
+}
+.content {
+	width: 1020px;
+	margin: 0 auto;
+	background-color: #EEEEEE;
+	overflow: hidden;
+}
+#top10 {
+	width: 600px;
+	height: 400px;
+	background-color: #AAA;
+	margin: 10px;
+}
