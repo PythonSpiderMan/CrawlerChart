@@ -25,13 +25,13 @@ function top10(yAxis_data, series_data) {
     },
     yAxis: {
         type: 'category',
-        data: ['巴西','印尼','美国','印度','中国','世界人口(万)']
+        data: yAxis_data
     },
     series: [
         {
             name: '粉丝',
             type: 'bar',
-            data: [18203, 23489, 29034, 104970, 131744, 630230]
+            data: series_data
         }
         ]
     };
@@ -41,10 +41,21 @@ function top10(yAxis_data, series_data) {
 
 $(document).ready(function () {
     // 发起请求
-    $.get('/api/v1', function (data) {
-        alert(data)
+    $.get('/api/v1/top10', function (result) {
+        var yAxis_data = new Array();
+        var series_data = new Array();
+        if (result.status==1){
+            user = result.data;
+            user_legnth = user.length;
+            console.log(user);
+            console.log(user_legnth);
+            for (var i=0; i<user_legnth; i++){
+                yAxis_data[i] = user[i].name;
+                series_data[i] = user[i].follower_count;
+            }
+        }
+        top10(yAxis_data.reverse(), series_data.reverse())
     });
-    top10('d', 'd')
 });
 
 
