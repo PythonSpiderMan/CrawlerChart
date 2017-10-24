@@ -47,8 +47,6 @@ $(document).ready(function () {
         if (result.status==1){
             user = result.data;
             user_legnth = user.length;
-            console.log(user);
-            console.log(user_legnth);
             for (var i=0; i<user_legnth; i++){
                 yAxis_data[i] = user[i].name;
                 series_data[i] = user[i].follower_count;
