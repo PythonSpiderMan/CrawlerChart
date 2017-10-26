@@ -1,5 +1,5 @@
-function top10(yAxis_data, series_data) {
-    var myChart = echarts.init(document.getElementById('top10'));
+function top20(yAxis_data, series_data) {
+    var myChart = echarts.init(document.getElementById('top20'));
     var option = {
     title: {
         text: '知乎用户粉丝排名'
@@ -41,7 +41,7 @@ function top10(yAxis_data, series_data) {
 
 $(document).ready(function () {
     // 发起请求
-    $.get('/api/v1/top10', function (result) {
+    $.get('/api/v1/top20', function (result) {
         var yAxis_data = new Array();
         var series_data = new Array();
         if (result.status==1){
@@ -52,7 +52,7 @@ $(document).ready(function () {
                 series_data[i] = user[i].follower_count;
             }
         }
-        top10(yAxis_data.reverse(), series_data.reverse())
+        top20(yAxis_data.reverse(), series_data.reverse())
     });
 });
 

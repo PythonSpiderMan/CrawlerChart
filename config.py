@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(__file__)
 # Application配置
 settings = dict(
     handlers=handlers,
+    # template_path=os.path.join(BASE_DIR, 'templates'),
     static_path=os.path.join(BASE_DIR, 'static'),
     debug=True,
 )

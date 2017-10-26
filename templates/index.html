@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/static/css/index.css">
     <script src="/static/js/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.bootcss.com/echarts/3.7.2/echarts-en.min.js"></script>
+    <!--<script src="/static/js/crawlerchart/search.js"></script>-->
     <title>qshine</title>
 </head>
 <body>
@@ -22,33 +23,31 @@
             </nav>
             <!--搜索-->
             <div class="searchBar">
-                <form class="form-inline">
+                <form class="form-inline" method="get" action="/relation.html">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" class="form-control" id="username" placeholder="用户名">
+                            <input type="text" class="form-control" name="url_token" id="url_token" placeholder="用户名">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">搜索</button>
+                    <button type="submit" class="btn btn-primary" id="search">搜索</button>
                 </form>
             </div>
-            <!--右侧导航-->
-            <div class="nav-right">
-                <a href="/about.html">关于</a>
-            </div>
         </div>
         <div class="col-md-2"></div>
     </div>
 
-    <!--粉丝数量前10-->
-    <div class="row" id="echart-top10">
+    <!--粉丝数量前20-->
+    <div class="row" id="echart-top20">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-            <div id="top10">
+            <div id="top20">
 
             </div>
         </div>
         <div class="col-md-2"></div>
     </div>
-    <script src="/static/js/crawlerchart/zhihu_top10.js"></script>
+
+
+    <script src="/static/js/crawlerchart/zhihu_top20.js"></script>
 </body>
 </html>

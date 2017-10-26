@@ -1,45 +1,50 @@
 #header {
-    width:100%;
-    height:50px;
-    margin:0;
-    padding:0;
+    width: 100%;
+    height: 50px;
+    margin: 0;
+    padding: 0;
     background-color: #262626;
 }
+
 #header .col-md-8 {
     padding: 0;
 }
+
 nav {
     float: left;
 }
+
 #index {
     height: 50px;
-    width:100px;
+    width: 100px;
     color: #FFFFFF;
-    line-height:50px;
+    line-height: 50px;
     font-size: 25px;
     float: left;
     text-align: left;
 }
+
 .searchBar {
-    float: left;
+    float: right;
     margin-top: 8px;
-    margin-left: 300px;
+    margin-right: 0;
 }
-#username{
+
+#url_token {
     border-radius: 5px;
 }
+
 .nav-right {
     float: right;
 }
-.nav-right a {
-    text-align: left;
-    font-size: 15px;
-    color: #FFFFFF;
-    width:100px;
-    height:50px;
-    line-height:50px;
-}
-#top10 {
-    height:600px;
+
+#top20 {
+    height: 600px;
     margin-top: 15px;
 }
+
+#relation {
+    height: 600px;
+    margin-top: 15px;
+}
+

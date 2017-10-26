@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/index.css">
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.bootcss.com/echarts/3.7.2/echarts-en.min.js"></script>
     <title>qshine</title>
 </head>
@@ -15,23 +16,34 @@
     <div class="row" id="header">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-            <ul id="nav">
-                <li><a href="#" id="index">主页</a></li>
-                <li><a href="#" id="about">关于</a></li>
-            </ul>
+            <!--左侧导航-->
+            <nav>
+                <a href="/" id="index">主页</a>
+            </nav>
+            <!--搜索-->
+            <div class="searchBar">
+                <!--TODO: 更改链接-->
+                <form class="form-inline" method="get" action="/relation.html">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="url_token" id="url_token" placeholder="用户名">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="search">搜索</button>
+                </form>
+            </div>
         </div>
         <div class="col-md-2"></div>
     </div>
 
-    <!--粉丝数量前10-->
-    <div class="row" id="echart-top10">
+    <!--用户关系可视化-->
+    <div class="row" id="echart-relation">
         <div class="col-md-2"></div>
         <div class="col-md-8" id="relation">
 
         </div>
         <div class="col-md-2"></div>
     </div>
-    <script src="/static/js/jquery-3.2.1.min.js"></script>
     <script src="/static/js/crawlerchart/zhihu_relation.js"></script>
 </body>
 </html>
