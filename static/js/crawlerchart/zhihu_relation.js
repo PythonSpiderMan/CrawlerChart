@@ -1,4 +1,4 @@
-function relation(title, legend_data, series_data, series_links, series_categories) {
+function relation(title, title_text, series_data, series_links, series_categories) {
     var myChart = echarts.init(document.getElementById('relation'));
     var option = {
         backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
@@ -20,7 +20,7 @@ function relation(title, legend_data, series_data, series_links, series_categori
             selectedMode: 'false',
             bottom: 20,
             // 分支数据汇总, 是下面的分类
-            data: legend_data
+            data: [title_text]
         }],
         toolbox: {
             show: true,
@@ -86,7 +86,7 @@ $(function () {
                     top: "top",
                     left: "center"
                 };
-                relation(title, result.data.legend_data, result.data.series_data, result.data.series_links, result.data.series_categories)
+                relation(title, title_text, result.data.series_data, result.data.series_links, result.data.series_categories)
             }
         }
     );

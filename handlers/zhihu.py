@@ -10,7 +10,6 @@ class Top20Handler(BaseHandler):
     """
     知乎粉丝数量前20
     """
-
     def get(self):
         try:
             with self.db.cursor() as cursor:
@@ -34,7 +33,7 @@ class Top20Handler(BaseHandler):
 
 class SearchHandler(BaseHandler):
     """
-    搜索
+    关注关系图谱
     """
     def post(self):
         url_token = self.get_argument('url_token', None)
@@ -46,14 +45,12 @@ class SearchHandler(BaseHandler):
         if url_token:
             res = {
                 'series_data': [],
-                'legend_data': [],
                 'series_links': [],
                 'series_categories': []
             }
             try:
                 with self.db.cursor() as cur:
-                    ss = "select `name`, `follower_count` from `t_zhihu_user` where `url_token`='{}'".format(url_token)
-                    cur.execute(ss)
+                    cur.execute("select `name`, `follower_count` from `t_zhihu_user` where `url_token`='{}'".format(url_token))
                     people = cur.fetchone()
                 # 中心数据
                 res['series_data'].append({
@@ -76,7 +73,6 @@ class SearchHandler(BaseHandler):
                             'category': follower['name'],
                             "draggable": "true"
                         })
-                        res['legend_data'].append(follower['name'])
                         res['series_links'].append({
                             'source': people['name'],
                             'target': follower['name']
