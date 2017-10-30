@@ -13,3 +13,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def db(self):
         return self.application.db
 
+    def prepare(self):
+        """设置xsrf"""
+        self.xsrf_token
+

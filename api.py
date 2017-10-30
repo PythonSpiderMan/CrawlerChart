@@ -5,8 +5,6 @@ import os
 from handlers import zhihu
 from tornado.web import StaticFileHandler
 
-
-
 handlers = [
     (r'/search', zhihu.SearchHandler),
     (r'/api/v1/search', zhihu.SearchHandler),

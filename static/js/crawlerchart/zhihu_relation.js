@@ -72,12 +72,22 @@ function param() {
     return query.split('=')[1];
 }
 
+// 获取xsrf_token
+function getCookie(name) {
+    var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+    return r ? r[1] : undefined;
+}
+
 $(function () {
-    query_string = param();
-    $.post("/api/v1/search", {
-            'url_token': param()
+    query_string = param();  // 请求用户名
+    $.ajax({
+        url: "/api/v1/search",
+        type: "POST",
+        data: {'url_token': query_string},
+        headers: {
+            "X-XSRFTOKEN": getCookie("_xsrf")
         },
-        function (result) {
+        success: function (result) {
             if (result.status == 1) {
                 title_text = result.data.series_data[0].name;
                 title = {
@@ -89,5 +99,5 @@ $(function () {
                 relation(title, title_text, result.data.series_data, result.data.series_links, result.data.series_categories)
             }
         }
-    );
+    });
 });
