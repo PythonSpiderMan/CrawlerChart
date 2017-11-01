@@ -78,6 +78,7 @@ function getCookie(name) {
     return r ? r[1] : undefined;
 }
 
+
 $(function () {
     query_string = param();  // 请求用户名
     $.ajax({
@@ -101,3 +102,4 @@ $(function () {
         }
     });
 });
+
