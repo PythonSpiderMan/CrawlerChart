@@ -14,9 +14,9 @@ imports = (
     'tasks.zhihu',
 )
 
-beat_schedule = {
-    'refreshTop20': {
-        'task': 'tasks.zhihu.refreshTop20',
-        'schedule': timedelta(seconds=30),
-    }
-}
+# beat_schedule = {
+#     'refreshTop20': {
+#         'task': 'tasks.zhihu.refreshTop20',
+#         'schedule': timedelta(seconds=30),
+#     }
+# }

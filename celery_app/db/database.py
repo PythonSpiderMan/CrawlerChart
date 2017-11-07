@@ -1,6 +1,6 @@
 # coding:utf-8
 
-from config import mysql_config
+from settings import mysql_config
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -13,7 +13,8 @@ Base = declarative_base()
 
 class UserInfo(Base):
     """用户信息表"""
-    __tablename__ = "t_zhihu_user"
+    __tablename__ = "test_zhihu_user"
+    # __tablename__ = "t_zhihu_user_test"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String(100), index=True)   # 用户id
@@ -40,9 +41,12 @@ class UserInfo(Base):
     text = Column(Text)     # json值
     create_time = Column(TIMESTAMP, server_default=func.now())
 
+
+
 class UpdateUserInfo(Base):
     """更新表"""
-    __tablename__ = "t_update_zhihu_user"
+    # __tablename__ = "t_update_zhihu_user"
+    __tablename__ = "test_update_zhihu"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String(100), index=True)   # 用户id
@@ -61,6 +65,15 @@ class UpdateUserInfo(Base):
     text = Column(Text)     # json值
     create_time = Column(TIMESTAMP, server_default=func.now())
 
+
+class Relation(Base):
+    """用户关系表"""
+    __tablename__ = "test_zhihu_relation"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    parent_user_id = Column(String(100), index=True)
+    children_user_id = Column(String(100), index=True)
+    create_time = Column(TIMESTAMP, server_default=func.now())
 
 
 engine = create_engine("mysql+pymysql://{user}:{password}@{host}:{port}/{db}?charset=utf8".format(**mysql_config))
