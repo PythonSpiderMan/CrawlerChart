@@ -4,8 +4,9 @@
 import logging
 import random
 
-from .BaseHandler import BaseHandler
 from tasks.zhihu import followeeRelation
+from .BaseHandler import BaseHandler
+
 
 class Top20Handler(BaseHandler):
     """

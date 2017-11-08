@@ -1,6 +1,6 @@
 # coding:utf-8
 
-from settings import mysql_config
+from config import MYSQL_CONFIG
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -76,7 +76,7 @@ class Relation(Base):
     create_time = Column(TIMESTAMP, server_default=func.now())
 
 
-engine = create_engine("mysql+pymysql://{user}:{password}@{host}:{port}/{db}?charset=utf8".format(**mysql_config))
+engine = create_engine("mysql+pymysql://{user}:{password}@{host}:{port}/{db}?charset=utf8".format(**MYSQL_CONFIG))
 # 创建表
 Base.metadata.create_all(engine)
 

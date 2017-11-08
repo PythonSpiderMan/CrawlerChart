@@ -4,9 +4,10 @@
 
 from datetime import timedelta
 from celery.schedules import crontab
+from config import REDIS_URL
 
 
-broker_url = 'redis://127.0.0.1:6379'
+broker_url = REDIS_URL
 
 timezone = 'Asia/Shanghai'
 

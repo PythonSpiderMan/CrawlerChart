@@ -13,7 +13,7 @@ def update_user_info(content):
     :return:
     """
     url_token = content['url_token']
-    user = session.query(UserInfo).filter(UserInfo.url_token==url_token)
+    user = session.query(UserInfo).filter(UserInfo.url_token==url_token).first()
     if user:
         try:
             user.update(dict(
@@ -67,6 +67,7 @@ def update_user_info(content):
             session.add(data)
             session.commit()
         except Exception as e:
+            print(e)
             session.rollback()
 
 

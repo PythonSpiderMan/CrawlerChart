@@ -4,15 +4,13 @@
 import json
 import time
 
-import pymysql
 import requests
-from libs.utils import update_user_info, insert_update_table
 from tasks import app
-
-from settings import mysql_config, time_delay, timeout
+from sqlalchemy import desc
 from db.database import session, UserInfo, Relation
+from libs.utils import update_user_info, insert_update_table
+from config import TIMEOUT, TIME_DELAY
 
-mysqlDb = pymysql.connect(**mysql_config)
 headers = {
     'authorization': 'oauth c3cef7c66a1843f8b3a9e6a1e3160e20',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
@@ -27,14 +25,10 @@ followees_url = 'https://www.zhihu.com/api/v4/members/{url_token}/followees?incl
 @app.task(ignore_result=True)
 def refreshTop20():
     """刷新前20个用户的所有信息"""
-    with mysqlDb.cursor() as cursor:
-        cursor.execute(
-            'SELECT `url_token` FROM `t_zhihu_user` ORDER BY `follower_count` DESC LIMIT 20')
-        results = cursor.fetchall()
+    results = session.query(UserInfo.url_token).order_by(desc('follower_count')).limit(20).all()
     for result in results:
-        # TODO: 改为send_task
-        userInfo(result['url_token'])
-        time.sleep(time_delay)
+        userInfo(result[0])
+        time.sleep(TIME_DELAY)
 
 
 def userInfo(url_token):
@@ -43,7 +37,7 @@ def userInfo(url_token):
         r = requests.get(
             user_info_url.format(url_token),
             headers=headers,
-            timeout=timeout
+            timeout=TIMEOUT
         )
     except Exception as e:
         pass
@@ -57,14 +51,15 @@ def userInfo(url_token):
 def followeeRelation(url_token):
     """用户关注的人"""
     try:
-        r = requests.get(user_info_url.format(url_token), headers=headers, timeout=timeout)
-    except: pass
+        r = requests.get(user_info_url.format(url_token), headers=headers, timeout=TIMEOUT)
+    except Exception as e:
+        print(e)
     else:
         userInfo = json.loads(r.content.decode('utf-8'))
         update_user_info(userInfo)  # 更新用户信息为最新
         children_user_id = userInfo['id']
         try:
-            r = requests.get(followees_url.format(url_token=url_token, offset=0), headers=headers, timeout=timeout)
+            r = requests.get(followees_url.format(url_token=url_token, offset=0), headers=headers, timeout=TIMEOUT)
         except: pass
         else:
             content = json.loads(r.content)
@@ -78,7 +73,7 @@ def followeeRelation(url_token):
 def followeeInfo(user_id, url_token, page):
     url = followees_url.format(url_token=url_token, offset=page)
     try:
-        r = requests.get(url, headers=headers, timeout=timeout)
+        r = requests.get(url, headers=headers, timeout=TIMEOUT)
     except: pass
     else:
         content = json.loads(r.content.decode('utf-8'))
