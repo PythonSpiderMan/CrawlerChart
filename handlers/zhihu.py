@@ -4,7 +4,7 @@
 import logging
 import random
 
-from tasks.zhihu import followeeRelation
+from tasks.zhihu import getUserInfo
 from .BaseHandler import BaseHandler
 
 
@@ -44,7 +44,7 @@ class SearchHandler(BaseHandler):
         """
         url_token = self.get_argument('url_token', None)
         # 只要是搜索都要调用celery任务进行抓取
-        followeeRelation.apply_async(args=[url_token])
+        getUserInfo.apply_async(args=[url_token, None, True], queue='q_userInfo', routing_key='rk_userInfo')
         data = dict(
             status=1,
             errmsg="",
@@ -99,7 +99,6 @@ class SearchHandler(BaseHandler):
                         })
                     data['data'] = res
             else:
-                # TODO: 没有搜到用户加入异步任务去爬去用户关注
                 data['status'] = 0
                 data['errmsg'] = '已发送到爬虫任务队列, 等待爬取......'
             
