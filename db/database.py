@@ -13,12 +13,11 @@ Base = declarative_base()
 
 class UserInfo(Base):
     """用户信息表"""
-    __tablename__ = "test_zhihu_user"
-    # __tablename__ = "t_zhihu_user_test"
+    __tablename__ = "t_zhihu_user"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(String(100), index=True)   # 用户id
-    url_token = Column(String(100), index=True)    # 用户token
+    user_id = Column(String(100), unique=True)   # 用户id
+    url_token = Column(String(100), unique=True)    # 用户token
 
     name = Column(String(100), index=True)      # 用户名
     headline = Column(String(100))              # 简介
@@ -45,8 +44,7 @@ class UserInfo(Base):
 
 class UpdateUserInfo(Base):
     """更新表"""
-    # __tablename__ = "t_update_zhihu_user"
-    __tablename__ = "test_update_zhihu"
+    __tablename__ = "t_update_zhihu"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String(100), index=True)   # 用户id
@@ -68,11 +66,12 @@ class UpdateUserInfo(Base):
 
 class Relation(Base):
     """用户关系表"""
-    __tablename__ = "test_zhihu_relation"
+    __tablename__ = "t_zhihu_relation"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     parent_user_id = Column(String(100), index=True)
     children_user_id = Column(String(100), index=True)
+    md5 = Column(String(32), unique=True)
     create_time = Column(TIMESTAMP, server_default=func.now())
 
 

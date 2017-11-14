@@ -57,6 +57,8 @@ def getUserInfo(url_token, refresh=None, relation=None):
         if refresh:
             insert_update_table(content)
         if relation:
+            print(11111)
+            insert_update_table(content)
             app.send_task('tasks.zhihu.followeeUser', args=[content, ], queue='q_followee', routing_key='rk_followee')
 
 
@@ -87,5 +89,4 @@ def followeeUser(info):
                 session.commit()
             except Exception as e:
                 session.rollback()
-                print(e)
         time.sleep(20)
