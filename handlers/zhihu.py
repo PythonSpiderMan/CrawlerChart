@@ -10,7 +10,7 @@ from tasks.zhihu import getUserInfo
 from .BaseHandler import BaseHandler
 
 
-class Top20Handler(BaseHandler):
+class FollowerTop20Handler(BaseHandler):
     """
     知乎粉丝数量前20
     """
@@ -51,18 +51,12 @@ class SearchHandler(BaseHandler):
         url_token = self.get_argument('url_token', None)
         # 只要是搜索都要调用celery任务进行抓取
         getUserInfo.apply_async(args=[url_token, None, True], queue='q_userInfo', routing_key='rk_userInfo')
-        data = dict(
-            status=1,
-            errmsg="",
-            data=None
-        )
         try:
             with self.db.cursor() as cur:
                 cur.execute("select `name`, `follower_count` from `t_zhihu_user` where `url_token`='{}'".format(url_token))
         except Exception as e:
             logging.error(e)
-            data['status'] = 0
-            data['errmsg'] = '数据库查询失败'
+            return self.write({'status': 0, 'errmsg': '数据库查询失败', 'data': None})
         else:
             people = cur.fetchone()
             if people is not None:
@@ -79,14 +73,11 @@ class SearchHandler(BaseHandler):
                 try:
                     # 关注的人
                     with self.db.cursor() as cursor:
-                        cursor.execute("select `name`, `follower_count` from `t_zhihu_user` where `user_id` in " \
-                                       "(select `parent_user_id` from `t_zhihu_relation` where `children_user_id`=" \
-                                       "(select `user_id` from `t_zhihu_user` where `url_token`='{}'))".format(url_token))
+                        cursor.execute("select `url_token`, `name`, `follower_count` from `t_zhihu_user` as user join (select `parent_url_token` from `t_zhihu_relation` where `children_url_token`='{}') as relation on user.url_token = relation.parent_url_token".format(url_token))
                         follower_list = cursor.fetchall()
                 except Exception as e:
                     logging.error(e)
-                    data['status'] = 0
-                    data['errmsg'] = '数据库查询失败'
+                    return self.write({'status': 0, 'errmsg': '数据库查询失败', 'data':None})
                 else:
                     for follower in follower_list:
                         res['series_data'].append({
@@ -103,9 +94,7 @@ class SearchHandler(BaseHandler):
                         res['series_categories'].append({
                             'name': follower['name']
                         })
-                    data['data'] = res
+                    return self.write({'status': 1, 'errmsg': '', 'data': res})
             else:
-                data['status'] = 0
-                data['errmsg'] = '已发送到爬虫任务队列, 等待爬取......'
+                return self.write({'status': 0, 'errmsg': '加入队列等待爬去', 'data': None})
             
-        self.write(data)

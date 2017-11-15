@@ -41,7 +41,7 @@ function top20(yAxis_data, series_data) {
 
 $(document).ready(function () {
     // 发起请求
-    $.get('/api/v1/top20', function (result) {
+    $.get('/api/v1/followerTop20', function (result) {
         var yAxis_data = new Array();
         var series_data = new Array();
         if (result.status==1){

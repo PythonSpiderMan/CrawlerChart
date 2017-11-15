@@ -7,7 +7,7 @@ import requests
 from tasks import app
 from sqlalchemy import desc
 from db.mysqldb import session, UserInfo, Relation
-from libs.utils import update_user_info, insert_update_table
+from libs.utils import update_user_info, insert_update_table, md5string
 from config import TIMEOUT, TIME_DELAY
 from db.redisdb import r as redis
 
@@ -70,7 +70,7 @@ def followeeUser(info):
     :param content: The content of the page
     :return:
     """
-    url_token, children_user_id, following_count = info['url_token'], info['id'], info['following_count']
+    url_token, following_count = info['url_token'], info['following_count']
     for page in range(0, following_count, 20):
         url = followees_url.format(url_token=url_token, offset=page)
         try:
@@ -83,9 +83,17 @@ def followeeUser(info):
             user_objs, relation_objs = [], []
             for data in page_datas:
                 user_objs.append(UserInfo(user_id=data['id'], url_token=data['url_token']))
-                relation_objs.append(Relation(parent_user_id=data['id'], children_user_id=children_user_id))
+                relation_objs.append(Relation(
+                    parent_url_token=data['url_token'],
+                    children_url_token=url_token,
+                    md5=md5string((data['utl_token']+url_token).encode('utf-8'))
+                ))
             try:
                 session.add_all(user_objs)  # 批量提交
+                session.commit()
+            except Exception as e:
+                session.rollback()
+            try:
                 session.add_all(relation_objs)
                 session.commit()
             except Exception as e:

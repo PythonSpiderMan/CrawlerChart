@@ -2,6 +2,7 @@
 # __author__ = 'qshine'
 
 import json
+import hashlib
 from db.mysqldb import session, UserInfo, UpdateUserInfo
 from sqlalchemy.sql import func
 
@@ -98,5 +99,7 @@ def insert_update_table(content):
     except Exception as e:
         session.rollback()
 
+
+md5string = lambda x:hashlib.md5(x).hexdigest()
 
 
