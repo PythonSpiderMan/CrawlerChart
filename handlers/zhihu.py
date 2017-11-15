@@ -2,12 +2,12 @@
 # __author__ = 'qshine'
 
 import json
-import config
 import random
 import logging
 
 from tasks.zhihu import getUserInfo
 from .BaseHandler import BaseHandler
+from constants import *
 
 
 class FollowerTop20Handler(BaseHandler):
@@ -17,7 +17,7 @@ class FollowerTop20Handler(BaseHandler):
     def get(self):
         # read data from cache first
         try:
-            result = self.redis.get('zhihu_Top20')
+            result = self.redis.get(ZHIHU_REDIS_KEY)
         except Exception as e:
             logging.error(e)
             result = None
@@ -35,7 +35,7 @@ class FollowerTop20Handler(BaseHandler):
                 return self.write({'status':0, 'errmsg': 'query error', 'data': None})
             else:
                 # write data to cache
-                self.redis.setex("zhihu_Top20", config.ZHIHU_TOP20_REDIS_EXPIRE_TIME, json.dumps(result))
+                self.redis.setex(ZHIHU_REDIS_KEY, ZHIHU_TOP20_REDIS_EXPIRE_TIME, json.dumps(result))
                 return self.write({'status': 1, 'errmsg':'', 'data':result})
 
 
@@ -97,4 +97,12 @@ class SearchHandler(BaseHandler):
                     return self.write({'status': 1, 'errmsg': '', 'data': res})
             else:
                 return self.write({'status': 0, 'errmsg': '加入队列等待爬去', 'data': None})
-            
+
+
+class GenderHandler(BaseHandler):
+    def get(self):
+        try:
+            with self.db.cursor() as cursor:
+                pass
+        except Exception as e:
+            pass

@@ -19,14 +19,15 @@ imports = (
 beat_schedule = {
     'refreshTop20': {
         'task': 'tasks.zhihu.refreshTop20',
-        'schedule': timedelta(seconds=30),
+        'schedule': timedelta(hours=2),
     }
 }
 
-# task_queues = (
-#     Queue('default', exchange=Exchange('default_queue', type='direct'), routing_key='rk_celery'),
-#     Queue('userInfo_queue', exchange=Exchange('userInfo_queue', type='direct'), routing_key='rk_userInfo'),
-# )
+task_queues = (
+    Queue('celery'),
+    Queue('q_userInfo', exchange=Exchange('q_userInfo', type='direct'), routing_key='rk_userInfo'),
+    Queue('q_followee', exchange=Exchange('q_followee', type='direct'), routing_key='rk_followee'),
+)
 
 task_routes = {
     'tasks.zhihu.getUserInfo': {
