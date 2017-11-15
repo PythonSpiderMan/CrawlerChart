@@ -1,8 +1,10 @@
 # coding:utf-8
 # __author__ = 'qshine'
 
-import logging
+import json
+import config
 import random
+import logging
 
 from tasks.zhihu import getUserInfo
 from .BaseHandler import BaseHandler
@@ -13,24 +15,28 @@ class Top20Handler(BaseHandler):
     知乎粉丝数量前20
     """
     def get(self):
-        data = dict(
-            status=1,
-            errmsg="",
-            data=None
-        )
-
+        # read data from cache first
         try:
-            with self.db.cursor() as cursor:
-                cursor.execute(
-                    'SELECT `name`, `follower_count` FROM `t_zhihu_user` ORDER BY `follower_count` DESC LIMIT 20')
-                result = cursor.fetchall()
+            result = self.redis.get('zhihu_Top20')
         except Exception as e:
             logging.error(e)
-            data['status'] = 0
-            data['errmsg'] = '数据库操作失败'
+            result = None
+
+        if result:
+            return self.write({'status': 1, 'errmsg':'', 'data':json.loads(result)})
         else:
-            data['data'] = result
-        self.write(data)
+            logging.debug('from sql ...')
+            try:
+                with self.db.cursor() as cursor:
+                    cursor.execute(
+                        'SELECT `name`, `follower_count` FROM `t_zhihu_user` ORDER BY `follower_count` DESC LIMIT 20')
+                    result = cursor.fetchall()
+            except Exception as e:
+                return self.write({'status':0, 'errmsg': 'query error', 'data': None})
+            else:
+                # write data to cache
+                self.redis.setex("zhihu_Top20", config.ZHIHU_TOP20_REDIS_EXPIRE_TIME, json.dumps(result))
+                return self.write({'status': 1, 'errmsg':'', 'data':result})
 
 
 class SearchHandler(BaseHandler):

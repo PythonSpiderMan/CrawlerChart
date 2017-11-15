@@ -13,6 +13,10 @@ class BaseHandler(tornado.web.RequestHandler):
     def db(self):
         return self.application.db
 
+    @property
+    def redis(self):
+        return self.application.redis
+
     def prepare(self):
         """设置xsrf"""
         self.xsrf_token

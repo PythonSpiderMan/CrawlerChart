@@ -17,9 +17,17 @@ MYSQL_CONFIG = dict(
     cursorclass=pymysql.cursors.DictCursor,
 )
 
-REDIS_URL = 'redis://127.0.0.1:6379'
+REDIS_CONFIG = dict(
+    host="127.0.0.1",
+    port=6379,
+    db=0
+)
+
+# broker url, db 1
+REDIS_URL = 'redis://127.0.0.1:6379/1'
 
 TIMEOUT = 5
 TIME_DELAY = 5
 
+ZHIHU_TOP20_REDIS_EXPIRE_TIME = 6 * 60 * 60    # 知乎粉丝top20的redis过期时间
 

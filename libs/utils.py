@@ -2,7 +2,7 @@
 # __author__ = 'qshine'
 
 import json
-from db.database import session, UserInfo, UpdateUserInfo
+from db.mysqldb import session, UserInfo, UpdateUserInfo
 from sqlalchemy.sql import func
 
 

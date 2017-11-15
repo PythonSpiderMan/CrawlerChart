@@ -9,6 +9,7 @@ import tornado.ioloop
 import tornado.options
 from api import handlers
 from config import BASE_DIR, MYSQL_CONFIG
+from db.redisdb import r as redis
 
 
 from tornado.options import define, options
@@ -21,6 +22,7 @@ class Application(tornado.web.Application):
     """
     def __init__(self, *args, **kwargs):
         self.db = pymysql.connect(**MYSQL_CONFIG)
+        self.redis = redis
         super(Application, self).__init__(*args, **kwargs)
 
 
