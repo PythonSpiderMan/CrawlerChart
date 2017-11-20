@@ -1,14 +1,14 @@
 # coding:utf-8
 # __author__ = 'qshine'
 
-import os
+import logging.config
 import pymysql
+import config
 import tornado.web
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 from api import handlers
-from config import BASE_DIR, MYSQL_CONFIG
 from db.redisdb import r as redis
 
 
@@ -21,20 +21,20 @@ class Application(tornado.web.Application):
     在Application中完成数据库的初始化连接
     """
     def __init__(self, *args, **kwargs):
-        self.db = pymysql.connect(**MYSQL_CONFIG)
+        self.db = pymysql.connect(**config.MYSQL_CONFIG)
         self.redis = redis
         super(Application, self).__init__(*args, **kwargs)
 
 
 
 def main():
+    # tornado.options.options['log_file_prefix'] = config.LOG_FILE    # web日志 存储位置
+    # tornado.options.options['log_rotate_when'] = config.LOG_ROTATE    # 按天切分,
+    tornado.options.options['logging'] = config.LOG_LEVEL    # 日志等级
     tornado.options.parse_command_line()
     app = Application(
         handlers=handlers,
-        static_path=os.path.join(BASE_DIR, 'static'),
-        debug=True,
-        xsrf_cookies=True,
-        cookie_secret="bZJc2sWbQLKos6GkHn/VB9oXwQt8S0R0kRvJ5/xJ89E="
+        **config.SETTINGS
     )
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(options.port)

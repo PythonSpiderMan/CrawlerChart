@@ -23,7 +23,7 @@ class FollowerTop20Handler(BaseHandler):
             result = None
 
         if result:
-            return self.write({'status': 1, 'errmsg':'', 'data':json.loads(result)})
+            return self.write({'status': 1, 'errmsg':'', 'data':json.loads(result.decode('utf-8'))})
         else:
             logging.debug('from sql ...')
             try:
@@ -98,11 +98,3 @@ class SearchHandler(BaseHandler):
             else:
                 return self.write({'status': 0, 'errmsg': '加入队列等待爬去', 'data': None})
 
-
-class GenderHandler(BaseHandler):
-    def get(self):
-        try:
-            with self.db.cursor() as cursor:
-                pass
-        except Exception as e:
-            pass

@@ -7,6 +7,8 @@ from db.mysqldb import session, UserInfo, UpdateUserInfo
 from sqlalchemy.sql import func
 
 
+md5string = lambda x:hashlib.md5(x).hexdigest()
+
 def update_user_info(content):
     """
     更新用户信息, 如果没有则插入
@@ -98,8 +100,3 @@ def insert_update_table(content):
         session.commit()
     except Exception as e:
         session.rollback()
-
-
-md5string = lambda x:hashlib.md5(x).hexdigest()
-
-

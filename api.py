@@ -4,10 +4,11 @@
 import os
 from handlers import zhihu
 from tornado.web import StaticFileHandler
+from tornado.web import url
 
 handlers = [
-    (r'/api/v1/search', zhihu.SearchHandler),
-    (r'/api/v1/followerTop20', zhihu.FollowerTop20Handler),
+    url(r'/api/v1/search', zhihu.SearchHandler, name="search"),
+    url(r'/api/v1/followerTop20', zhihu.FollowerTop20Handler, name="follower"),
     # 首页
-    (r"/(.*)", StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__), "templates"), default_filename="index.html"))
+    url(r"/(.*)", StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__), "templates"), default_filename="index.html"))
 ]

@@ -44,7 +44,7 @@ class UserInfo(Base):
 
 class UpdateUserInfo(Base):
     """更新表"""
-    __tablename__ = "t_update_zhihu"
+    __tablename__ = "t_zhihu_update"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String(100), index=True)   # 用户id

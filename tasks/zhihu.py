@@ -11,11 +11,6 @@ from libs.utils import update_user_info, insert_update_table, md5string
 from constants import *
 from db.redisdb import r as redis
 
-headers = {
-    'authorization': 'oauth c3cef7c66a1843f8b3a9e6a1e3160e20',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
-}
-
 
 @app.task(ignore_result=True)
 def refreshTop20():
@@ -23,11 +18,10 @@ def refreshTop20():
     Refresh the first 20 users
     :return:
     """
-    print(111111)
-    # results = session.query(UserInfo.url_token).order_by(desc('follower_count')).limit(20).all()
-    # for result in results:
-    #     app.send_task('tasks.zhihu.getUserInfo', args=[result[0], ], queue='q_userInfo', routing_key='rk_userInfo')
-    #     time.sleep(TIME_DELAY)
+    results = session.query(UserInfo.url_token).order_by(desc('follower_count')).limit(20).all()
+    for result in results:
+        app.send_task('tasks.zhihu.getUserInfo', args=[result[0], True], queue='q_userInfo', routing_key='rk_userInfo')
+        time.sleep(TIME_DELAY)
 
 
 @app.task(ignore_result=True)
@@ -42,7 +36,7 @@ def getUserInfo(url_token, refresh=None, relation=None):
     try:
         r = requests.get(
             USER_INFO_URL.format(url_token),
-            headers=headers,
+            headers=HEADERS,
             timeout=TIMEOUT
         )
     except Exception as e:
@@ -53,7 +47,6 @@ def getUserInfo(url_token, refresh=None, relation=None):
         if refresh:
             insert_update_table(content)
         if relation:
-            insert_update_table(content)
             app.send_task('tasks.zhihu.followeeUser', args=[content, ], queue='q_followee', routing_key='rk_followee')
 
 
@@ -68,7 +61,7 @@ def followeeUser(info):
     for page in range(0, following_count, 20):
         url = FOLLOWEES_URL.format(url_token=url_token, offset=page)
         try:
-            r = requests.get(url, headers=headers, timeout=TIMEOUT)
+            r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
         except:
             pass
         else:
@@ -80,7 +73,7 @@ def followeeUser(info):
                 relation_objs.append(Relation(
                     parent_url_token=data['url_token'],
                     children_url_token=url_token,
-                    md5=md5string((data['utl_token']+url_token).encode('utf-8'))
+                    md5=md5string((data['url_token']+url_token).encode('utf-8'))
                 ))
             try:
                 session.add_all(user_objs)  # 批量提交
@@ -92,4 +85,4 @@ def followeeUser(info):
                 session.commit()
             except Exception as e:
                 session.rollback()
-        time.sleep(20)
+        time.sleep(TIME_DELAY)
