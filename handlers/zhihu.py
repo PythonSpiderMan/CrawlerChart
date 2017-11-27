@@ -28,9 +28,9 @@ class FollowerTop20Handler(BaseHandler):
             logging.debug('from sql ...')
             try:
                 with self.db.cursor() as cursor:
-                    cursor.execute(
-                        'SELECT `name`, `follower_count` FROM `t_zhihu_user` ORDER BY `follower_count` DESC LIMIT 20')
+                    cursor.execute('SELECT `name`, `follower_count` FROM `t_zhihu_user` ORDER BY `follower_count` DESC LIMIT 20')
                     result = cursor.fetchall()
+                    print(result)
             except Exception as e:
                 return self.write({'status':0, 'errmsg': 'query error', 'data': None})
             else:

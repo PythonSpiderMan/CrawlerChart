@@ -19,7 +19,8 @@ imports = (
 beat_schedule = {
     'refreshTop20': {
         'task': 'tasks.zhihu.refreshTop20',
-        'schedule': timedelta(hours=2),
+        'schedule': crontab(hour=23, minute=59),
+        # 'schedule': timedelta(hours=2),
     }
 }
 

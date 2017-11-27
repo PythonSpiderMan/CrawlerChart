@@ -9,8 +9,6 @@ from sqlalchemy import desc
 from db.mysqldb import session, UserInfo, Relation
 from libs.utils import update_user_info, insert_update_table, md5string
 from constants import *
-from db.redisdb import r as redis
-
 
 @app.task(ignore_result=True)
 def refreshTop20():
@@ -76,7 +74,7 @@ def followeeUser(info):
                     md5=md5string((data['url_token']+url_token).encode('utf-8'))
                 ))
             try:
-                session.add_all(user_objs)  # 批量提交
+                session.add_all(user_objs)
                 session.commit()
             except Exception as e:
                 session.rollback()

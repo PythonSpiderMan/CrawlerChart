@@ -19,7 +19,7 @@ def update_user_info(content):
     user = session.query(UserInfo).filter(UserInfo.url_token==url_token).first()
     if user:
         try:
-            user.name = ['name']
+            user.name = content['name']
             user.answer_count = content['answer_count']
             user.question_count = content['question_count']
             user.articles_count = content['articles_count']
